@@ -1,0 +1,33 @@
+import sys
+import re
+
+
+MLFB = input ("Enter the MLFB: ")
+if len(MLFB) < 12:
+        print ("Please enter a valid MLFB.")
+        
+
+'''check if MLFB is available'''
+def check_MLFB(MLFB):
+    with open('save.txt', 'r') as f:
+      datafile = f.readlines(str)
+    for line in datafile:
+        if MLFB in line:
+            print ("MLFB is available")
+            if MLFB not in datafile:
+                print ("MLFB is not available")
+              
+
+confirm = input("Do you want to replace MLFB? Enter Y or N: ")
+if confirm in ["Y", "y"]:
+
+    with open ('save.txt', 'r') as f:
+        f_contents = f.read()
+    f_contents.replace(MLFB, NewMLFB = input ("Enter the new MLFB: "))
+    with open ('save.txt', 'w') as f:
+        f.write(f_contents)
+     
+
+    print('MLFB replaced')
+
+    sys.exit()

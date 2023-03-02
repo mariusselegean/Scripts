@@ -1,0 +1,84 @@
+'''scan folder'''
+import logging
+import os
+
+def main():
+    '''
+    main function
+    '''
+    logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s')
+    logging.debug('Start of program')
+    files = scan_folder('Personal')
+    search_files(files, '.txt')
+    search_file('Personal/test.txt', 'word')
+    copy_lines('Personal/test.txt', 'word')
+    save_file('Personal/test.txt', 'word')
+    logging.debug('End of program')
+
+def scan_folder(dirname):
+    '''
+    scan folder and return a list of files
+    '''
+    files = [] 
+    dirname = 'Personal' 
+    dirpath = 'C:/Users/mselegean/Documents/' + dirname 
+    for dirpath, filenames in os.walk(dirname):  
+        for filename in filenames:
+            files.append(os.path.join(dirpath, filename))
+    return files
+
+    if files == []:
+        print('No files found')
+
+
+
+'''search in a list of files'''
+
+def search_files(files, suffix):
+    '''
+    search files in a list of files with a given suffix'''
+    suffix = '.txt'
+    for file in files:
+        if file.endswith(suffix):
+            print(file)
+
+'''search for data in a file'''
+
+def search_file(file, line):
+    '''
+    search for a word in a file
+    '''
+    line = 'word'
+    with open(file, 'r') as f:
+        for line in f:
+            if 'word' in line:
+                print(line)
+
+'''Copy returned lines from a file to a new file'''
+
+def copy_lines(file, line):
+    '''
+    copy lines from a file to a new file
+    '''
+    with open(file, 'r') as f: 
+        for line in f:
+            if 'word' in line:
+                with open('newfile.txt', 'a') as f: 
+                    f.write(line)
+
+'''save new file'''
+
+def save_file(file, line):
+    '''
+    save a new file
+    '''
+    with open(file, 'a') as f:
+        f.write(line)
+
+
+
+
+
+ 
+
+

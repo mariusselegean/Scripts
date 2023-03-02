@@ -54,6 +54,7 @@ def set_variables():
     messagebox.showinfo(title="Set Variable", message="Variables successfully set "
                                                       "\n Choose an option Add or Remove Licenses")
 
+
 # Add Licenses
 def add_licenses():
     try:

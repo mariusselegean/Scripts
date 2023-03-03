@@ -1,0 +1,98 @@
+########################################################################
+##    Author: Selegean Marius                                         ##
+##    Scan specific folder for extensions.                            ##
+##    Move the files in separate folders.                             ##
+########################################################################
+
+import os
+import glob
+import sys
+'''Create a new folder'''
+confirm = input(f'This program will organize your documents in separate folders\n If you agree please press (y/n)')
+if confirm in ["Y", "y"]:
+else:
+    print("Operation aborted")
+    sys.exit()
+log = open("logs.txt", "a")
+if not log.writable():  # Checking if we can write the log file.
+    sys.exit("Cannot write to the log file. Exiting the script.")
+count = 0
+
+start_time = datetime.datetime.now()
+
+confirm = input (f'Do you want to create a new folders for each filetype? (y/n)')
+if confirm in ["Y", "y"]:
+    try:
+        computer_name = input("Enter your computer name: ")
+    if not computer_name:
+        sys.exit()
+
+    os.mkdir('C:/Users/mselegean/Downloads/MP3/')
+    print('New folder MP3 created')
+
+    os.mkdir('C:/Users/mselegean/Downloads/TXT/')
+    print('New folder TXT created')
+
+    os.mkdir('C:/Users/mselegean/Downloads/PDF/')
+    print('New folder PDF created')
+
+    os.mkdir('C:/Users/mselegean/Downloads/Excel/')
+    print('New folder Excel created')
+
+    os.mkdir('C:/Users/mselegean/Downloads/Word/')
+    print('New folders Word created')
+
+log.write(f"[{datetime.datetime.now()}]\t{count} Folders created.\n")
+
+TXT = '*.txt'
+MP3 = '*.mp3'
+PDF = '*.pdf'
+Excel = '*.xlsx'
+Word = '*.docx'
+
+os.chdir('C:/Users/mselegean/Downloads')
+
+for file in glob.glob(TXT, recursive = False):
+    print(file)
+
+confirm = input ('Do you want to move files to TXT Folder? (y/n)')
+if confirm in ["Y", "y"]:
+    '''move files found to TXT folder'''
+    for file in glob.glob(TXT, recursive = False):
+        os.rename(file, 'C:/Users/mselegean/Downloads/TXT/' + file)
+        print(f'{file} moved to TXT folder') 
+log.write(f"[{datetime.datetime.now()}]\t{count} files moved.\n")
+
+for file in glob.glob(PDF, recursive = False):
+    print(file)
+
+confirm = input ('Do you want to move files to PDF Folder? (y/n)')
+if confirm in ["Y", "y"]:
+    '''move files found to PDF folder'''
+    for file in glob.glob(PDF, recursive = False):
+        os.rename(file, 'C:/Users/mselegean/Downloads/PDF/' + file)
+        print(f'{file} moved to PDF folder')
+log.write(f"[{datetime.datetime.now()}]\t{count} files moved.\n")
+
+confirm = input ('Do you want to move files to Excel Folder? (y/n)')
+if confirm in ["Y", "y"]:
+    '''move files found to PDF folder'''
+    for file in glob.glob(Excel, recursive = False):
+        os.rename(file, 'C:/Users/mselegean/Downloads/Excel/' + file)
+        print(f'{file} moved to Excel folder')
+log.write(f"[{datetime.datetime.now()}]\t{count} files moved.\n")
+
+confirm = input ('Do you want to move files to Word Folder? (y/n)')
+if confirm in ["Y", "y"]:
+    '''move files found to PDF folder'''
+    for file in glob.glob(Excel, recursive = False):
+        os.rename(file, 'C:/Users/mselegean/Downloads/Word/' + file)
+        print(f'{file} moved to Excel folder')
+log.write(f"[{datetime.datetime.now()}]\t{count} files moved.\n")
+
+end_time = datetime.datetime.now()  # Time it ended.
+time_elapsed = end_time - start_time  # Time it took to run the script successfully.
+log.close()  # Closing the log file.
+        else:
+    print ('Operation Aborted')
+    sys.exit()

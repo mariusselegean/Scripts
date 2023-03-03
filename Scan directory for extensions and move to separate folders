@@ -1,0 +1,79 @@
+#####################################################################
+##    Author: Selegean Marius                                      ##
+##    Scan a specific folder for files and return a list of files  ##
+##    Find a string in a file and replace it with a new string     ##
+##    Then, move the file to a new folder                          ## 
+##                                                                 ##
+#####################################################################
+
+'''Import modules'''
+
+import glob
+import os
+import sys
+
+'''Set variables'''
+
+os.chdir('C:/Users/mselegean/Documents/Personal')     # Change directory to the folder you want to scan
+Filename = 'save.txt'                                 # Name of the file you want to scan
+word = 'abcdefghijk'                                  # String you want to find in the file
+len(word) >10                                         # If the string is longer than 10 characters, it will be replaced with a new string
+len(word) <12                                         # If the string is shorter than 12 characters, it will be replaced with a new string
+NewValue = 'lmnoprstuvw'                              # String you want to replace the old string with
+len(NewValue) >10                                     # If the string is longer than 10 characters, it will be replaced with a new string
+len(NewValue) <12                                     # If the string is shorter than 12 characters, it will be replaced with a new string
+
+'''Scan folder for specific files'''
+
+for file in glob.glob(Filename, recursive = True):    #find all files with a given suffix
+    print(file) 
+if 'save.txt' in glob.glob(Filename, recursive = True): 
+    print('The file was successfully found')
+else :
+    print('The file was not found')
+    sys.exit()
+
+'''find string in file'''
+
+confirm = input (f'Do you want to search {word} in file? (y/n)')
+if confirm in ["Y", "y"]:
+    with open(Filename) as f:                         # Open the file
+	    for i, line in enumerate(f):                  # Loop through each line in the file
+                if word in line:                      # If the word is found in the line
+                    print(f'{word} was found in line {i+1}') # Print the line number
+                
+else:
+    print (f'{word} not found')
+    sys.exit()
+if confirm in ["N", "n"]:
+    print ('Operation Aborted')
+    sys.exit()
+
+
+'''replace word in file'''
+
+confirm = input (f'Do you want to replace {word} in file {Filename}? (y/n)')
+if confirm in ["Y", "y"]:
+    with open (Filename, 'r') as f:             # Open the file
+        f_contents = f.read()                   # Read the file
+        f_contents = f_contents.replace(word, NewValue) # Replace the word with the new word
+        with open (Filename, 'w') as f:         # Open the file
+            f.write(f_contents)                 # Write the file
+            print(f_contents)                   # Print the file
+            print("Replace completed!")
+else:
+    print (f'{word} Not replaced! Operation Aborted')
+    sys.exit()
+
+
+'''Move file to new folder'''
+
+confirm = input (f'Do you want to move {Filename} to a new folder? (y/n)')
+if confirm in ["Y", "y"]:
+    os.rename(Filename, 'C:/Users/mselegean/Documents/Personal/Moved/' 'processed_'+ Filename) # Move the file to a new folder
+    print(f'{Filename} moved to new folder')                                                   # Print the file
+else:
+    print (f'{Filename} not moved! Operation Aborted')
+    sys.exit()
+
+#end of program

@@ -25,7 +25,7 @@ root.title("Add or Remove Licenses")
 ######################################
 #Global Variables used in this program
 ######################################
-credentials = "ODY1ODE5NjE0OTcyOTYzNTpjNGZlMzMzOThlNzc"
+credentials = "tk.StringVar"
 customer_id = tk.StringVar
 license_id = tk.StringVar
 to_add = int

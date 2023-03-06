@@ -241,10 +241,10 @@ def open_logfile(): # Open the log file
 ###################
 # Text Boxes/Labels
 ###################
-"""w1 = tk.Label(root, text="Enter Credentials")
+w1 = tk.Label(root, text="Enter Credentials")
 w1.grid(row=0, column=0)
 text_entry1 = tk.Entry(root, width=45, borderwidth=5, textvariable=credentials)
-text_entry1.grid(row=1, column=0)"""
+text_entry1.grid(row=1, column=0)
 
 w2 = tk.Label(root, text="Enter Customer ID")
 w2.grid(row=2, column=0)

@@ -1,0 +1,53 @@
+########################################
+## Raise to power -- Web application  ##
+## Author: Marius Selegean            ##
+########################################
+
+"""
+This is a simple web application that will take 2 inputs from users.
+First input is an integer number second input is the power that the number will be raised
+"""
+
+# importing packages
+from flask import Flask
+from flask import request
+
+app = Flask(__name__)
+
+# decorator
+@app.route("/", methods=["GET"])
+def index():
+    i = ""
+    y = ""
+    val1 = request.args.get("val1", "")
+    if val1:
+        i = int(val1)
+
+    val2 = request.args.get("val2", "")
+    if val2:
+        y = int(val2)
+    return (
+            """<form action="" method="get">
+                    Enter Number: <input type="int" name="val1">
+                    Enter Power: <input type="int" name="val2">
+                    <input type="submit" value="Raise to power">
+                </form>"""
+            + "Result: "
+            + raise_power(i, y)
+            )
+
+# Raise to power function
+def raise_power(val1, val2):
+#    result = int(val1) ** int(val2)
+#    return str(result)
+    try:
+        result = int(val1) ** int(val2)
+        return str(result)
+    except ValueError:
+        return " "
+
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=8080, debug=True)
+
+
+# End of script

@@ -1,0 +1,323 @@
+################################################################################
+## Author: Selegean Marius                                                     #
+## Email: marius.selegean@yahoo.com                                            #
+## Description: Move files in named folders grouped by their extensions types  #
+## Date: 22/03/2023                                                            #
+################################################################################
+# Import packages
+import os
+import glob
+import sys
+import time
+import datetime
+
+'''
+Create a new folders for each configured extensions
+'''
+
+# Path - please change ot by your needs.
+os.chdir  # = (r'C:\Users\mselegean\Documents\Personal\Test_move_files')
+
+# Input from user
+confirm = input('Do you want to create new folders for:\n HAR, MP3, MP4, TEXT, PDF, Excel, Word and Pictures filetypes? (y/n)')
+
+"""
+This code will check if the folders already exist.
+If the folders exist then creation is skipped
+If folder does not exist, then the folder will be created.
+"""
+log = open("logs.log", "a")
+if confirm in ['Y', 'y']:
+    # Create folders or check if they already exist.
+    if not os.path.exists('HAR'):
+        os.mkdir('HAR')
+        print('New folder HAR created.')
+        log.write(f"[{datetime.datetime.now()}]\tNew folder HAR created.\n")
+    if not os.path.exists('MP3'):
+        os.mkdir('MP3')
+        print('New folder MP3 created.')
+        log.write(f"[{datetime.datetime.now()}]\tNew folder MP3 created.\n")
+    if not os.path.exists('MP4'):
+        os.mkdir('MP4')
+        print('New folder MP4 created.')
+        log.write(f"[{datetime.datetime.now()}]\tNew folder MP4 created.\n")
+    if not os.path.exists('TEXT'):
+        os.mkdir('TEXT')
+        print('New folder TEXT created.')
+        log.write(f"[{datetime.datetime.now()}]\tNew folder TEXT created.\n")
+    if not os.path.exists('PDF'):
+        os.mkdir('PDF')
+        print('New folder PDF created.')
+        log.write(f"[{datetime.datetime.now()}]\tNew folder PDF created.\n")
+    if not os.path.exists('Excel'):
+        os.mkdir('Excel')
+        print('New folder Excel created.')
+        log.write(f"[{datetime.datetime.now()}]\tNew folder Excel created.\n")
+    if not os.path.exists('Word'):
+        os.mkdir('Word')
+        print('New folder Word created.')
+        log.write(f"[{datetime.datetime.now()}]\tNew folder Word created.\n")
+    if not os.path.exists('Pictures'):
+        os.mkdir('Pictures')
+        print('New folder Pictures created.\n')
+        log.write(f"[{datetime.datetime.now()}]\tNew folder Pictures created.\n")
+
+    else:
+        print('\n''Folders already created.''\n')
+        log.write(f"[{datetime.datetime.now()}]\tFolders already created.\n")
+else:
+    print('\n''Operation Aborted!''\n''No files will be moved.''\n')
+    log.write(f"[{datetime.datetime.now()}]\tOperation Aborted!''\n''No files will be moved.\n")
+    sys.exit()
+
+# 1 second break
+time.sleep(1)
+
+# Variables used in this script
+HAR = '*.har'
+TEXT = '*.txt'
+MP3 = '*.mp3'
+MP4 = '*.mp4'
+PDF = '*.pdf'
+Excel = '*.xlsx'
+Word = '*.docx'
+Pictures1 = '*.jp*'
+Pictures2 = '*.png'
+
+
+# Find and count HAR files
+count = 0
+for file in glob.glob(HAR, recursive=False):
+    count += 1
+    print(file)
+    log.write(f"[{datetime.datetime.now()}]\t{file}\n")
+
+print(f"Found {count} HAR files."'\n')
+log.write(f"[{datetime.datetime.now()}]\tFound {count} HAR files..\n")
+
+# Input from user - Move files?
+if count == 0:
+    print("Skipping... moving to next folder.")
+    log.write(f"[{datetime.datetime.now()}]\tSkipping... moving to next folder.\n")
+else:
+    confirm = input('Do you want to move files to HAR Folder? (y/n)')
+    print("\n")
+    if confirm in ["Y", "y"]:
+        '''move files found to HAR folder'''
+        for file in glob.glob(HAR, recursive=False):
+            os.rename(file, os.path.join('HAR', os.path.basename(file)))
+            print(f'{file} moved to HAR folder')
+            log.write(f"[{datetime.datetime.now()}]\t{count} moved to HAR folder\n")
+print("\n")
+# 1 second break
+time.sleep(1)
+
+# Find and count TEXT files
+count = 0
+for file in glob.glob(TEXT, recursive=False):
+    count += 1
+    print(file)
+    log.write(f"[{datetime.datetime.now()}]\t{file}\n")
+
+print(f"Found {count} Text files."'\n')
+log.write(f"[{datetime.datetime.now()}]\tFound {count} Text files..\n")
+
+# Input from user - Move files?
+if count == 0:
+    print("Skipping... moving to next folder.")
+    log.write(f"[{datetime.datetime.now()}]\tSkipping... moving to next folder.\n")
+else:
+    confirm = input('Do you want to move files to TEXT Folder? (y/n)')
+    print("\n")
+    if confirm in ["Y", "y"]:
+        '''move files found to TEXT folder'''
+        for file in glob.glob(TEXT, recursive=False):
+            os.rename(file, os.path.join('TEXT', os.path.basename(file)))
+            print(f'{file} moved to TEXT folder')
+            log.write(f"[{datetime.datetime.now()}]\t{count} moved to TEXT folder\n")
+
+print("\n")
+# 1 second break
+time.sleep(1)
+
+# Find and count MP3 files
+count = 0
+for file in glob.glob(MP3, recursive=False):
+    count += 1
+    print(file)
+    log.write(f"[{datetime.datetime.now()}]\t{file}\n")
+
+print(f"Found {count} MP3 files."'\n')
+log.write(f"[{datetime.datetime.now()}]\tFound {count} MP3 files..\n")
+
+# Input from user - Move files?
+if count == 0:
+    print("Skipping... moving to next folder.")
+    log.write(f"[{datetime.datetime.now()}]\tSkipping... moving to next folder.\n")
+else:
+    confirm = input('Do you want to move files to MP3 Folder? (y/n)')
+    print("\n")
+    if confirm in ["Y", "y"]:
+        '''move files found to MP3 folder'''
+        for file in glob.glob(MP3, recursive=False):
+            os.rename(file, os.path.join('MP3', os.path.basename(file)))
+            print(f'{file} moved to MP3 folder')
+            log.write(f"[{datetime.datetime.now()}]\t{count} moved to MP3 folder\n")
+
+print("\n")
+# 1 second break
+time.sleep(1)
+
+# Find and count MP4 files
+count = 0
+for file in glob.glob(MP4, recursive=False):
+    count += 1
+    print(file)
+    log.write(f"[{datetime.datetime.now()}]\t{file}\n")
+
+print(f"Found {count} MP4 files."'\n')
+log.write(f"[{datetime.datetime.now()}]\tFound {count} MP4 files..\n")
+
+# Input from user - Move files?
+if count == 0:
+    print("Skipping... moving to next folder.")
+    log.write(f"[{datetime.datetime.now()}]\tSkipping... moving to next folder.\n")
+else:
+    confirm = input('Do you want to move files to MP4 Folder? (y/n)')
+    print("\n")
+    if confirm in ["Y", "y"]:
+        '''move files found to MP4 folder'''
+        for file in glob.glob(MP4, recursive=False):
+            os.rename(file, os.path.join('MP4', os.path.basename(file)))
+            print(f'{file} moved to MP4 folder')
+            log.write(f"[{datetime.datetime.now()}]\t{count} moved to MP4 folder\n")
+
+print("\n")
+# 1 second break
+time.sleep(1)
+
+# Find and count PDF files
+count = 0
+for file in glob.glob(PDF, recursive=False):
+    count += 1
+    print(file)
+    log.write(f"[{datetime.datetime.now()}]\t{file}\n")
+
+print(f"Found {count} PDF files."'\n')
+log.write(f"[{datetime.datetime.now()}]\tFound {count} PDF files..\n")
+
+# Input from user - Move files?
+if count == 0:
+    print("Skipping... moving to next folder.")
+    log.write(f"[{datetime.datetime.now()}]\tSkipping... moving to next folder.\n")
+else:
+    confirm = input('Do you want to move files to PDF Folder? (y/n)')
+    print("\n")
+    if confirm in ["Y", "y"]:
+        '''move files found to PDF folder'''
+        for file in glob.glob(PDF, recursive=False):
+            os.rename(file, os.path.join('PDF', os.path.basename(file)))
+            print(f'{file} moved to PDF folder')
+            log.write(f"[{datetime.datetime.now()}]\t{count} moved to PDF folder\n")
+
+print("\n")
+# 1 second break
+time.sleep(1)
+
+# Find and count Excel files
+count = 0
+for file in glob.glob(Excel, recursive=False):
+    count += 1
+    print(file)
+    log.write(f"[{datetime.datetime.now()}]\t{file}\n")
+
+print(f"Found {count} Excel files."'\n')
+log.write(f"[{datetime.datetime.now()}]\tFound {count} Excel files..\n")
+
+# Input from user - Move files?
+if count == 0:
+    print("Skipping... moving to next folder.")
+    log.write(f"[{datetime.datetime.now()}]\tSkipping... moving to next folder.\n")
+else:
+    confirm = input('Do you want to move files to Excel Folder? (y/n)')
+    print("\n")
+    if confirm in ["Y", "y"]:
+        '''move files found to Excel folder'''
+        for file in glob.glob(Excel, recursive=False):
+            os.rename(file, os.path.join('Excel', os.path.basename(file)))
+            print(f'{file} moved to Excel folder')
+            log.write(f"[{datetime.datetime.now()}]\t{count} moved to Excel folder\n")
+
+print("\n")
+# 1 second break
+time.sleep(1)
+
+# Find and count Word files
+count = 0
+for file in glob.glob(Word, recursive=False):
+    count += 1
+    print(file)
+    log.write(f"[{datetime.datetime.now()}]\t{file}\n")
+
+print(f"Found {count} Word files."'\n')
+log.write(f"[{datetime.datetime.now()}]\tFound {count} Word files..\n")
+
+# Input from user - Move files?
+if count == 0:
+    print("Skipping... moving to next folder.")
+    log.write(f"[{datetime.datetime.now()}]\tSkipping... moving to next folder.\n")
+else:
+    confirm = input('Do you want to move files to Word Folder? (y/n)')
+    print("\n")
+    if confirm in ["Y", "y"]:
+        '''move files found to Word folder'''
+        for file in glob.glob(Word, recursive=False):
+            os.rename(file, os.path.join('Word', os.path.basename(file)))
+            print(f'{file} moved to Word folder')
+            log.write(f"[{datetime.datetime.now()}]\t{count} moved to Word folder\n")
+
+print("\n")
+# 1 second break
+time.sleep(1)
+
+
+# Find and count Pictures files
+count = 0
+for file in glob.glob(Pictures1, recursive=False):
+    count += 1
+    print(file)
+    log.write(f"[{datetime.datetime.now()}]\t{file}\n")
+for file in glob.glob(Pictures2, recursive=False):
+    count += 1
+    print(file)
+    log.write(f"[{datetime.datetime.now()}]\t{file}\n")
+
+print(f"Found {count} Picture files."'\n')
+log.write(f"[{datetime.datetime.now()}]\tFound {count} Picture files")
+
+# Input from user - Move files?
+if count == 0:
+    # Because this is the last folder to scan and there is no other folder to be scanned, we can comment the print line.
+    # If more folders will be added, uncomment the print line with message and comment the empty print.
+    # print("Skipping... moving to next folder.")
+    print("")
+else:
+    confirm = input('Do you want to move files to Pictures Folder? (y/n)\n...')
+    if confirm in ["Y", "y"]:
+        '''move files found to Pictures folder'''
+        for file in glob.glob(Pictures1, recursive=False):
+            os.rename(file, os.path.join('Pictures', os.path.basename(file)))
+        for file in glob.glob(Pictures2, recursive=False):
+            os.rename(file, os.path.join('Pictures', os.path.basename(file)))
+        print(f'Files moved to Pictures folder')
+        log.write(f"[{datetime.datetime.now()}]\t{count} moved to Pictures folder\n")
+
+    else:
+        print('\n''Operation Aborted''\n')
+        log.write(f"[{datetime.datetime.now()}]\tOperation Aborted\n")
+        sys.exit()
+
+print('\n''Operation completed!''\n')
+log.write(f"[{datetime.datetime.now()}]\tOperation completed!\n")
+log.close()
+# End of script

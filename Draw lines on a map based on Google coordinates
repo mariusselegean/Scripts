@@ -1,0 +1,76 @@
+############################################################################################################
+# GUI Author: "Marius Selegean"                                                                            #
+# Email: "marius.selegean@yahoo.com"                                                                       #
+# Description: Draw lines on a map based on Google coordinates                                             #
+# Date: 19.04.2023                                                                                         #
+############################################################################################################
+"""
+How to use:
+1. Enter an approximate latitude and longitude. Basically this will be center of the map.
+2. Enter the number of coordinates you want to use
+3. Enter coordinates in this format: 46.712683817744036, 23.714053231996452
+    - you can click right on Google Maps on a point you want to add and copy into the code.
+4. After coordinates are inserted, the application will open automatically the web browser
+   showing lines between coordinates inserted.
+"""
+import folium
+import webbrowser
+import os
+
+
+def get_user_location():
+    """
+    Asks the user to input latitude and longitude.
+    """
+    lat, lon = map(float, input("Enter the latitude and longitude, separated by a comma (ex: 46.73xx, 23.71xx): ").split(','))
+    return lat, lon
+
+
+def create_map(location):
+    """
+    Creates a map centered on the specified location.
+    """
+    my_map = folium.Map(location=location, zoom_start=14)
+    return my_map
+
+
+def get_coordinates():
+    """
+    Asks the user for the number of coordinates they want to input and gathers them.
+    """
+    num_coords = int(input("How many coordinates do you want to input? "))
+    coordinates = []
+    for i in range(num_coords):
+        coord_str = input("Enter the coordinates separated by a comma (ex: 46.73xx, 23.71xx): ")
+        x, y = map(float, coord_str.split(","))
+        coordinates.append((x, y))
+    return coordinates
+
+
+def draw_lines(coordinates, my_map):
+    """
+    Loops through the coordinates and draws lines between them on the map.
+    """
+    for i in range(len(coordinates)-1):
+        start = coordinates[i]
+        end = coordinates[i+1]
+        folium.PolyLine(locations=[start, end], color='red').add_to(my_map)
+    return my_map
+
+
+def save_and_display_map(my_map):
+    """
+    Saves the map and opens it in the default browser.
+    """
+    my_map.save("maps.html")
+    webbrowser.open('file://' + os.path.realpath("maps.html"))
+
+
+# Calling the functions to create and display the map.
+location = get_user_location()
+my_map = create_map(location)
+coordinates = get_coordinates()
+my_map = draw_lines(coordinates, my_map)
+save_and_display_map(my_map)
+
+# End of script

@@ -1,0 +1,246 @@
+import json
+import tkinter
+import tkinter as tk
+from tkinter import messagebox
+from tkinter import filedialog
+import requests
+import datetime
+from functools import partial
+
+###################################
+# Root of application and it's name
+###################################
+root = tk.Tk()
+root.title("Remove Audio Links")
+
+######################################
+#Global Variables used in this program
+######################################
+credentials = "removed for security purposes"
+customer_id = tk.StringVar
+extension = tk.StringVar
+artifactid = tk.StringVar
+id = tk.StringVar
+
+# Clear text box function
+def clear_output():
+    output_text.delete('1.0', tk.END)
+
+def clear_output2():
+    output_text2.delete('1.0', tk.END)
+
+# Clear form option
+def reset(): # clear form
+    for clear in root.winfo_children():
+        if isinstance(clear, tk.Entry):
+            clear.delete(0, "end")
+
+def set_variables():
+    global credentials
+    global customer_id
+    customer_id = text_entry1.get()
+    print(text_entry1.get())
+    global extension
+    extension = text_entry2.get()
+    print(text_entry2.get())
+    messagebox.showinfo(title="Set Variable", message="Customer ID and Extension set! ")
+
+def set_variables_links():
+    global credentials
+    global customer_id
+    customer_id = text_entry1.get()
+    print(text_entry1.get())
+    global artifactid
+    artifactid = text_entry3.get()
+    print(text_entry3.get())
+    global id
+    id = text_entry4.get()
+    print(text_entry4.get())
+    messagebox.showinfo(title="Set Variable", message="Artifact ID and ID set! ")
+
+def get_audio_links():
+    try:
+        global credentials
+        global customer_id
+        global extension
+
+        if not credentials:  # Check if credentials are defined.
+            messagebox.showerror(title= "ERROR", message= "Incorrect Credentials!")
+        if not customer_id:  # Check if customer_id is defined.
+            messagebox.showerror(title= "ERROR", message= "Incorrect Customer ID!")
+        if not extension:  # Check if license_id is defined.
+            messagebox.showerror(title= "ERROR", message= "Incorrect Extension!")
+
+        def authentication():  # Getting the token.
+            headers = {'Authorization': f'Basic {credentials}', 'Content-Type': 'application/x-www-form-urlencoded'}
+            payload = {'grant_type': 'client_credentials', 'scope': 'vo'}
+            sso = requests.post(f"https://sso.8x8.com/oauth2/v1/token", headers=headers, data=payload)
+            return sso.json()["access_token"]
+
+        bearer = {'Authorization': 'Bearer ' + authentication()}  # Bearer token for the API requests.
+
+        get_pbx_id = requests.get(f"https://platform.8x8.com/vo/config/v1/customers/{customer_id}/pbxes?scope=expand",
+                                  headers=bearer)
+        if get_pbx_id.ok:
+            if get_pbx_id.json()['pageResultSize'] == 0:
+                messagebox.showinfo(title="Info", message="Check variables!")
+            else:
+                for pbx in get_pbx_id.json()['content']:
+                    print(pbx)
+                    pbx_id_headers = {
+                        'Authorization': 'Bearer ' + authentication(),
+                        'Content-Type': 'application/json',
+                    }
+                    check_audio_links = requests.get(
+                        f"https://platform.8x8.com/repository/v1/customers/{customer_id}/audios/links?filter=extension=={extension};pbxId=={pbx['pbxId']}",
+                        headers=pbx_id_headers)
+
+                    if check_audio_links.ok:
+                        print(check_audio_links.request.url)
+                        if check_audio_links.json()['pageResultSize'] != 0:
+                            audio_headers = {
+                                'Authorization': 'Bearer ' + authentication(),
+                                'Content-Type': 'application/json',
+                            }
+                            audio_payload = check_audio_links.json()
+                            output_text.insert(tk.END, json.dumps(audio_payload, indent=4))
+                        else:
+                            output_text.insert(tk.END, "No audio links found\n")
+    except KeyboardInterrupt:
+        print("\nBye!")
+    except KeyError:
+        print("\nOne of the variables is incorrect. Please check and try again.")
+    except FileNotFoundError:
+        print("\nText file not found. Please create the respective file and try again.")
+
+def delete_audio_link():
+    try:
+        global credentials
+        global customer_id
+        global artifactid
+        global id
+
+        if not credentials:  # Check if credentials are defined.
+            messagebox.showerror(title= "ERROR", message= "Incorrect Credentials!")
+        if not customer_id:  # Check if customer_id is defined.
+            messagebox.showerror(title= "ERROR", message= "Incorrect Customer ID!")
+        if not artifactid:
+            messagebox.showerror(title="ERROR", message="Incorrect ArtifactID!")
+        if not id:
+            messagebox.showerror(title="ERROR", message="Incorrect ID!")
+
+        def authentication():  # Getting the token.
+            headers = {'Authorization': f'Basic {credentials}', 'Content-Type': 'application/x-www-form-urlencoded'}
+            payload = {'grant_type': 'client_credentials', 'scope': 'vo'}
+            sso = requests.post(f"https://sso.8x8.com/oauth2/v1/token", headers=headers, data=payload)
+            return sso.json()["access_token"]
+
+        bearer = {'Authorization': 'Bearer ' + authentication()}  # Bearer token for the API requests.
+
+        delete_link = requests.delete(f"https://platform.8x8.com/repository/v1/customers/{customer_id}/audios/{artifactid}/links/{id}",
+                                      headers=bearer)
+        print(delete_link.request.url)
+        if delete_link.ok:
+            pbx_id_payload = delete_link.json()
+            output_text2.insert(tk.END, json.dumps(pbx_id_payload, indent=4))
+            messagebox.showinfo(title= "Info", message= "Audio link successfully deleted - check Output Message box.")
+        else:
+            output_text2.insert(tk.END, "\nAudio link not deleted")
+            messagebox.showinfo(title="Info", message="Audio link was not deleted - check Output Message box.")
+
+    except KeyboardInterrupt:
+        print("\nBye!")
+    #except KeyError:
+    #    print("\nOne of the variables is incorrect. Please check and try again.")
+    except FileNotFoundError:
+        print("\nText file not found. Please create the respective file and try again.")
+
+###################
+# Text Boxes/Labels
+###################
+"""w1 = tk.Label(root, text="Enter Credentials")
+w1.grid(row=0, column=0)
+text_entry1 = tk.Entry(root, width=45, borderwidth=5, textvariable=credentials)
+text_entry1.grid(row=1, column=0)"""
+
+w2 = tk.Label(root, text="Enter Customer ID")
+w2.grid(row=0, column=0)
+text_entry1 = tk.Entry(root, width=35, borderwidth=5, textvariable=customer_id)
+text_entry1.grid(row=1, column=0)
+
+w3 = tk.Label(root, text="Extension")
+w3.grid(row=2, column=0)
+text_entry2 = tk.Entry(root, width=35, borderwidth=5, textvariable=extension)
+text_entry2.grid(row=3, column=0)
+
+w4 = tk.Label(root, text="Artifact ID")
+w4.grid(row=2, column=3)
+text_entry3 = tk.Entry(root, width=35, borderwidth=5, textvariable=artifactid)
+text_entry3.grid(row=3, column=3)
+
+w5 = tk.Label(root, text="ID")
+w5.grid(row=0, column=3)
+text_entry4 = tk.Entry(root, width=35, borderwidth=5, textvariable=id)
+text_entry4.grid(row=1, column=3)
+
+# Outout box labels
+w6 = tk.Label(root, text="Output Box")
+w6.grid(row=4, column=1)
+w7 = tk.Label(root, text="Output Message Box")
+w7.grid(row=6, column=1)
+
+w8 = tk.Label(root, text="1. Enter Customer ID and Extension.\n"
+                         "2. Set Customer ID and Extension.\n"
+                         "3. Get Audio links.\n"
+                         "4. The audio links will be populated into the Output Box.")
+w8.grid(row=5, column=0)
+
+w9 = tk.Label(root, text="1. From Output Box, copy the ID into ID box.\n"
+                         "2. From Output Box copy the Artifact ID in the Artifact ID box.\n"
+                         "3. Set Artifact ID and ID.\n"
+                         "4. Delete Audio Link.\n"
+                         "5. The success message is expected in Output Message Box.")
+w9.grid(row=5, column=3)
+
+#########
+# Buttons
+#########
+b1 = tk.Button(root, text="Set Customer ID and Extension", command=set_variables)
+b1.grid(row=8, column=0)
+b1 = tk.Button(root, text="Get Audio links", command=get_audio_links)
+b1.grid(row=3, column=1)
+
+b2 = tk.Button (root, text="Clear form", command=lambda:reset())
+b2.grid(row=8, column=1)
+
+b3 = tk.Button(root, text="Quit", command=root.destroy)
+b3.grid(row=11, column=1)
+
+b4 = tk.Button(root, text="Delete Audio Link", command=delete_audio_link)
+b4.grid(row=9, column=3)
+
+b5 = tk.Button(root, text="Set Artifact ID and ID", command=set_variables_links)
+b5.grid(row=8, column=3)
+
+b6 = tk.Button(root, text="Clear Output Message", command=clear_output)
+b6.grid(row=9, column=1)
+
+b6 = tk.Button(root, text="Clear output message", command=clear_output2)
+b6.grid(row=10, column=1)
+
+scrollbar = tk.Scrollbar(root)
+output_text = tk.Text(root, height=25, width=60)
+output_text.grid(row=5, column=1, padx=10, pady=10)
+scrollbar.grid(row=5, column=2, padx=10, pady=10, sticky='NS')
+scrollbar.config(command=output_text.yview)
+output_text.config(yscrollcommand=scrollbar.set)
+
+scrollbar2 = tk.Scrollbar(root)
+output_text2 = tk.Text(root, height=10, width=60)
+output_text2.grid(row=7, column=1, padx=10, pady=10)
+scrollbar2.grid(row=7, column=2, padx=10, pady=10, sticky='NS')
+scrollbar2.config(command=output_text2.yview)
+output_text2.config(yscrollcommand=scrollbar2.set)
+
+# End of program
+root.mainloop()
